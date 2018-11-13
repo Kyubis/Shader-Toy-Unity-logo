@@ -1,0 +1,96 @@
+float Determinante(in vec2 u, in vec2 v)
+{ 
+    return u.x * v.y - u.y * v.x; 
+}
+bool PixelShouldBeColored(in vec2 A, in vec2 B, in vec2 C, in vec2 P) 
+{
+    vec2 u = P - A;
+    vec2 v = P - B;
+    vec2 w = P - C;
+    float r = Determinante(u, v);
+    float s = Determinante(v, w);
+    float t = Determinante(w, u);
+    return ((r >= 0.0) && (s >= 0.0) && (t >= 0.0))
+        || ((r <= 0.0) && (s <= 0.0) && (t <= 0.0));
+}
+vec4 PixelColor(in vec2 A, in vec2 B, in vec2 C
+                      ,in vec2 P)
+{
+    vec4 Color = vec4(1.0, 1.0, 1.0, 1.0);  
+    
+    if (PixelShouldBeColored (A, B, C, P))
+    {     
+           return Color;   
+    }
+}
+vec2 uv = vec2(0);
+void mainImage( out vec4 fragColor, in vec2 fragCoord )
+{
+    uv = fragCoord.xy / iResolution.xy;
+    
+    //Point positions for triangles
+    
+    //center
+    vec2 p1 = vec2(0.488, 0.538);
+    vec2 p2 = vec2(0.547, 0.485);    
+    vec2 p3 = vec2(0.495, 0.432);    
+    
+    //Arrow base 1
+    vec2 p4 = vec2(0.609, 0.878);
+    vec2 p5 = vec2(0.662, 0.151);    
+    vec2 p6 = vec2(0.266, 0.432); 
+    
+    //Arrow base 2
+    vec2 p7 = vec2(0.660, 0.825);
+    vec2 p8 = vec2(0.607, 0.097);    
+    vec2 p9 = vec2(0.267, 0.544);
+    
+    //Arrow tip
+    vec2 p10 = vec2(0.697, 0.990);
+    vec2 p11 = vec2(0.692, 0.026);    
+    vec2 p12 = vec2(0.140, 0.510);
+    
+    //Arrow right 1
+    vec2 p13 = vec2(0.760, 0.611);
+    vec2 p14 = vec2(0.441, 0.131);    
+    vec2 p15 = vec2(0.326, 0.791);
+    
+    //Arrow right 2
+    vec2 p16 = vec2(0.720, 0.497);
+    vec2 p17 = vec2(0.397, 0.240);    
+    vec2 p18 = vec2(0.410, 0.789);
+    
+    //Arrow left 1
+    vec2 p19 = vec2(0.441, 0.889);
+    vec2 p20 = vec2(0.764, 0.410);    
+    vec2 p21 = vec2(0.326, 0.229);
+    
+    //Arrow left 2
+    vec2 p22 = vec2(0.400, 0.776);
+    vec2 p23 = vec2(0.721, 0.518);    
+    vec2 p24 = vec2(0.410, 0.232);
+    
+    // Conbine triangles to form a Unity logo
+    fragColor = PixelColor (p1, p2, p3, uv);
+    fragColor += PixelColor (p1, p2, p4, uv);
+    fragColor += PixelColor (p2, p3, p5, uv);
+    fragColor += PixelColor (p3, p1, p6, uv);
+    fragColor += PixelColor (p4, p7, p2, uv);
+    fragColor += PixelColor (p5, p8, p3, uv);
+    fragColor += PixelColor (p6, p9, p1, uv);
+    fragColor += PixelColor (p4, p7, p10, uv);
+    fragColor += PixelColor (p5, p8, p11, uv);
+    fragColor += PixelColor (p6, p9, p12, uv);
+    fragColor += PixelColor (p10, p7, p13, uv);
+    fragColor += PixelColor (p11, p8, p14, uv);
+    fragColor += PixelColor (p12, p9, p15, uv);
+    fragColor += PixelColor (p7, p13, p16, uv);
+    fragColor += PixelColor (p8, p14, p17, uv);
+    fragColor += PixelColor (p9, p15, p18, uv);
+    fragColor += PixelColor (p10, p4, p19, uv);
+    fragColor += PixelColor (p11, p5, p20, uv);
+    fragColor += PixelColor (p12, p6, p21, uv);
+    fragColor += PixelColor (p4, p19, p22, uv);
+    fragColor += PixelColor (p5, p20, p23, uv);
+    fragColor += PixelColor (p6, p21, p24, uv);
+}
